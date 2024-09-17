@@ -26,9 +26,12 @@ int main(int argc, char const *argv[])
     {
         printUsage();
     }
-    // bvcs init
+    // bvcs init <name>
     else if (command == "init" || command == "-i")
-        init();
+        if(argc < 3)
+             std::cout << "Usage: bvcs init <name>" << std::endl;
+        else
+            init(argv[2]);
     // bvcs stage <file>
     else if (command == "stage" || command == "-s")
     {

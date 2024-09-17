@@ -9,6 +9,7 @@
 				"/Zi",
 				"/EHsc",
 				"/nologo",
+				"/std:c++17",
 				"/I${workspaceFolder}\\include",
 				"/Fe${workspaceFolder}\\bvcs.exe",
 				"${workspaceFolder}\\src\\bvcs.cpp",

@@ -50,6 +50,16 @@
         "xloctime": "cpp",
         "xmemory": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "chrono": "cpp",
+        "codecvt": "cpp",
+        "filesystem": "cpp",
+        "forward_list": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "list": "cpp",
+        "ratio": "cpp",
+        "sstream": "cpp",
+        "vector": "cpp"
     }
 }
