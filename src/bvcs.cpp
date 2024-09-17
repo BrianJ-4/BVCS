@@ -26,19 +26,16 @@ int main(int argc, char const *argv[])
     {
         printUsage();
     }
-    // bvcs init <name>
+    // bvcs init
     else if (command == "init" || command == "-i")
-        if(argc < 3)
-             std::cout << "Usage: bvcs init <name>" << std::endl;
-        else
-            init(argv[2]);
-    // bvcs stage <repo> <file>
+            init();
+    // bvcs stage <file>
     else if (command == "stage" || command == "-s")
     {
-        if (argc < 4)
-            std::cout << "Usage: bvcs stage <repo> <filename>" << std::endl;
+        if (argc < 3)
+            std::cout << "Usage: bvcs stage <file>" << std::endl;
         else
-            stage(argv[2], argv[3]);
+            stage(argv[2]);
     }
     // bvcs commit -m <message>
     else if (command == "commit" || command == "-c")

@@ -1,28 +1,32 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+namespace fs = std::filesystem;
 
-void init(const std::string& name)
+void init()
 {
-    if (std::filesystem::exists(name))
+    const fs::path bvcsPath{".bvcs"};
+
+    if (fs::exists(bvcsPath))
     {
         std::cout << "Repository already exists in this location" << std::endl;
         return;
     }
 
-    std::filesystem::create_directory(name);
-    std::filesystem::create_directory(name + "/.bvcs");
-    std::filesystem::create_directory(name + "/.bvcs/contents");
-    std::filesystem::create_directory(name + "/.bvcs/staging");
-    std::filesystem::create_directory(name + "/.bvcs/refs");
-    std::filesystem::create_directory(name + "/.bvcs/refs/heads");
+    fs::create_directory(bvcsPath);
 
-    std::ofstream headFile(name + "/.bvcs/HEAD");
+    fs::create_directory(bvcsPath);
+    fs::create_directory(bvcsPath / "objects");
+    fs::create_directory(bvcsPath / "staging");
+    fs::create_directory(bvcsPath / "refs");
+    fs::create_directory(bvcsPath / "refs/heads");
+
+    std::ofstream headFile(bvcsPath / "HEAD");
     headFile << "ref: refs/heads/main\n";
     headFile.close();
 
-    std::ofstream masterFile(name + "/.bvcs/refs/heads/main");
-    masterFile.close();
+    std::ofstream mainFile(bvcsPath / "refs/heads/main");
+    mainFile.close();
 
-    std::cout << "Initialized new BVCS repository " << name << std::endl;
+    std::cout << "Initialized new BVCS repository" << std::endl;
 }

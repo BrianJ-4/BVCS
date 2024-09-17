@@ -1,23 +1,23 @@
 #include <iostream>
 #include <filesystem>
+namespace fs = std::filesystem;
 
-void stage(const std::string& repo, const std::string& file)
+void stage(const std::string& file)
 {
-    // Check if the repo has been created
-    std::filesystem::path repoParentPath = repo;
-    std::filesystem::path repoPath = repoParentPath / ".bvcs"; 
-    if (!std::filesystem::exists(repoPath))
+    // Check if repo has been created
+    fs::path repoPath = ".bvcs"; 
+    if (!fs::exists(repoPath))
     {
-        std::cout << "Initialize " << repo << " repo first" << std::endl;
+        std::cout << "Initialize repo first" << std::endl;
         return;
     }
 
-    if (!std::filesystem::exists(file))
+    // Check if the file exists
+    if (!fs::exists(file))
     {
         std::cout << "File not found" << std::endl;
         return;
     }
 
-    std::filesystem::path stagingPath = repoPath / "staging";
-    std::filesystem::path filePath = repoParentPath / file;
+    
 }
