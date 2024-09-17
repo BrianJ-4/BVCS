@@ -32,13 +32,13 @@ int main(int argc, char const *argv[])
              std::cout << "Usage: bvcs init <name>" << std::endl;
         else
             init(argv[2]);
-    // bvcs stage <file>
+    // bvcs stage <repo> <file>
     else if (command == "stage" || command == "-s")
     {
-        if (argc < 3)
-            std::cout << "Usage: bvcs stage <filename>" << std::endl;
+        if (argc < 4)
+            std::cout << "Usage: bvcs stage <repo> <filename>" << std::endl;
         else
-            stage(argv[2]);
+            stage(argv[2], argv[3]);
     }
     // bvcs commit -m <message>
     else if (command == "commit" || command == "-c")

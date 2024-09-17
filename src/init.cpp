@@ -13,6 +13,7 @@ void init(const std::string& name)
     std::filesystem::create_directory(name);
     std::filesystem::create_directory(name + "/.bvcs");
     std::filesystem::create_directory(name + "/.bvcs/contents");
+    std::filesystem::create_directory(name + "/.bvcs/staging");
     std::filesystem::create_directory(name + "/.bvcs/refs");
     std::filesystem::create_directory(name + "/.bvcs/refs/heads");
 
