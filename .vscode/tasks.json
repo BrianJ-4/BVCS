@@ -1,0 +1,34 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: cl.exe build all files",
+			"command": "cl.exe",
+			"args": [
+				"/Zi",
+				"/EHsc",
+				"/nologo",
+				"/I${workspaceFolder}\\include",
+				"/Fe${workspaceFolder}\\bvcs.exe",
+				"${workspaceFolder}\\src\\bvcs.cpp",
+				"${workspaceFolder}\\src\\init.cpp",
+				"${workspaceFolder}\\src\\stage.cpp",
+				"${workspaceFolder}\\src\\commit.cpp",
+				"${workspaceFolder}\\src\\branch.cpp",
+				"${workspaceFolder}\\src\\checkout.cpp",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "compiler: cl.exe"
+		}
+	]
+}
