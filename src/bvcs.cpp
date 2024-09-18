@@ -37,6 +37,14 @@ int main(int argc, char const *argv[])
         else
             stage(argv[2]);
     }
+    // bvcs unstage <file>
+    else if (command == "unstage" || command == "-u")
+    {
+        if (argc < 3)
+            std::cout << "Usage: bvcs unstage <file>" << std::endl;
+        else
+            unstage(argv[2]);
+    }
     // bvcs commit -m <message>
     else if (command == "commit" || command == "-c")
     {

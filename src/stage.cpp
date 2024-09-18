@@ -31,3 +31,28 @@ void stage(const std::string& file)
 
     cout << "Staged " << file << endl;
 }
+
+void unstage(const std::string& file)
+{
+    // Check if repo has been created
+    fs::path repoPath = ".bvcs"; 
+    if (!fs::exists(repoPath))
+    {
+        cout << "Initialize repo first" << endl;
+        return;
+    }
+
+    fs::path filePath(file);                            // Path of file
+    fs::path stagingPath = ".bvcs/staging";             // Staging path in repo
+    fs::path stagedFilePath = stagingPath / filePath;  // Final path where file should be saved
+    
+    // Check if the file exists in staging directory
+    if (!fs::exists(stagedFilePath))
+    {
+        cout << "File not in staging area" << endl;
+        return;
+    }
+
+    fs::remove(stagedFilePath);
+    cout << "Unstaged " << file << endl;
+}
