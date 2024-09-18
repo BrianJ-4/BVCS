@@ -98,8 +98,5 @@ void listStagedFiles()
 
     cout << "Staged files and directories:" << endl;
     for (const auto& dir_entry : fs::recursive_directory_iterator(stagingPath))
-    {
         cout << dir_entry.path().lexically_relative(stagingPath).string() << endl;
-    }
-
 }
