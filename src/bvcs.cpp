@@ -45,13 +45,19 @@ int main(int argc, char const *argv[])
         else
             commit(argv[3]);
     }
-    // bvcs branch <name>
+    // bvcs branch
     else if (command == "branch" || command == "-b")
     {
-        if (argc < 3)
+        if (argc < 2)
             std::cout << "Usage: bvcs branch <name>" << std::endl;
-        else
+        // bvcs branch <name>
+        else if (argc == 3)
             branch(argv[2]);
+        // bvcs branch delete <name>
+        else if (argc == 4 && std::string(argv[2]) == "delete")
+            deleteBranch(argv[3]);
+        else
+            std::cout << "Usage: bvcs branch <name>" << std::endl;
     }
     // bvcs checkout <branch>
     else if (command == "checkout" || command == "-co")
@@ -61,17 +67,7 @@ int main(int argc, char const *argv[])
         else
             checkout(argv[2]);
     }
-    // bvcs delete <argument> <name>
-    else if (command == "delete" || command == "-d")
-    {
-        if (argc < 4)
-            std::cout << "Usage: bvcs delete <argument> <name>" << std::endl;
-        else if (std::string(argv[2]) == "branch")
-            deleteBranch(argv[3]);
-        else
-            std::cout << "Usage: bvcs delete <argument> <name>" << std::endl;
-    }
-
+    
     else
     {
         std::cout << "Unknown command: use -h to see usages" << std::endl;
