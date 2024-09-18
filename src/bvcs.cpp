@@ -1,5 +1,6 @@
 #include <iostream>
 #include "bvcs.h"
+#include <vector>
 
 void printUsage()
 {
@@ -48,10 +49,13 @@ int main(int argc, char const *argv[])
     // bvcs commit -m <message>
     else if (command == "commit" || command == "-c")
     {
-        if (argc < 4 || argv[2] != "-m")
+        if (argc < 4 || std::string(argv[2]) != "-m")
             std::cout << "Usage: bvcs commit -m <message>" << std::endl;
         else
-            commit(argv[3]);
+        {
+            std::vector<std::string> message(argv + 3, argv + argc);
+            commit(message);
+        }
     }
     // bvcs branch
     else if (command == "branch" || command == "-b")
