@@ -53,13 +53,23 @@ int main(int argc, char const *argv[])
         else
             branch(argv[2]);
     }
-    // bvcs checout <branch>
+    // bvcs checkout <branch>
     else if (command == "checkout" || command == "-co")
     {
         if (argc < 3)
             std::cout << "Usage: bvcs checout <branch>" << std::endl;
         else
             checkout(argv[2]);
+    }
+    // bvcs delete <argument> <name>
+    else if (command == "delete" || command == "-d")
+    {
+        if (argc < 4)
+            std::cout << "Usage: bvcs delete <argument> <name>" << std::endl;
+        else if (std::string(argv[2]) == "branch")
+            deleteBranch(argv[3]);
+        else
+            std::cout << "Usage: bvcs delete <argument> <name>" << std::endl;
     }
 
     else
