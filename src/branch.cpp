@@ -61,7 +61,7 @@ void deleteBranch(const string& branchName)
     }
     
     // Delete the branch
-    filesystem::remove(branchPath);
+    fs::remove(branchPath);
     cout << "Deleted branch " << branchName << endl;
 }
 
