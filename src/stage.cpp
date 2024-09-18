@@ -24,12 +24,35 @@ void stage(const std::string& file)
     fs::path stagingPath = ".bvcs/staging";             // Staging path in repo
     fs::path stagingFilePath = stagingPath / filePath;  // Final path where file should be saved
 
-    // Create the directory where we will store the file and its path
-    // Then copy the file, making sure to overwrite in case file has already been staged
-    fs::create_directory(stagingFilePath.parent_path());
-    fs::copy(filePath, stagingFilePath, fs::copy_options::overwrite_existing);
+    // Check if input is a directory or file
+    if (fs::is_directory(filePath))
+    {
+        // If directory, recursively iterate through contents
+        for (const auto& dir_entry : fs::recursive_directory_iterator(filePath))
+        {
+            // Get the relative path of the current directory
+            fs::path path = dir_entry.path().lexically_relative(filePath);
+            fs::path targetPath = stagingFilePath / path;
 
-    cout << "Staged " << file << endl;
+            // If directory we create it in staging area
+            if (fs::is_directory(dir_entry))
+                fs::create_directories(targetPath);
+            else
+            {
+                fs::create_directories(targetPath.parent_path());
+                fs::copy(dir_entry.path(), targetPath, fs::copy_options::overwrite_existing);
+            }
+        }
+        std::cout << "Staged " << file << " and its contents" << std::endl;
+    }
+    else
+    {
+        // Create the directory where we will store the file and its path
+        // Then copy the file, making sure to overwrite in case file has already been staged
+        fs::create_directories(stagingFilePath.parent_path());
+        fs::copy(filePath, stagingFilePath, fs::copy_options::overwrite_existing);
+        cout << "Staged " << file << endl;
+    }
 }
 
 void unstage(const std::string& file)
@@ -69,6 +92,7 @@ void unstage(const std::string& file)
 
     // Get the parent of the file we just unstaged
     // Loop while parentPath is empty and we have not reached the root of staging
+    // This will clean up any empty parent directories after unstaging a file
     // Fix for Issue #4
     fs::path parentPath = stagedFilePath.parent_path();
     while (fs::is_empty(parentPath) && parentPath != stagingPath)
