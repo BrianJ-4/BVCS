@@ -45,15 +45,24 @@ int main(int argc, char const *argv[])
         else
             commit(argv[3]);
     }
-    // bvcs branch <name>
+    // bvcs branch
     else if (command == "branch" || command == "-b")
     {
-        if (argc < 3)
+        if (argc < 2)
             std::cout << "Usage: bvcs branch <name>" << std::endl;
-        else
+        // bvcs branch list
+        else if (argc == 3 && std::string(argv[2]) == "list")
+            listBranches();
+        // bvcs branch <name>
+        else if (argc == 3)
             branch(argv[2]);
+        // bvcs branch delete <name>
+        else if (argc == 4 && std::string(argv[2]) == "delete")
+            deleteBranch(argv[3]);
+        else
+            std::cout << "Usage: bvcs branch <name>" << std::endl;
     }
-    // bvcs checout <branch>
+    // bvcs checkout <branch>
     else if (command == "checkout" || command == "-co")
     {
         if (argc < 3)

@@ -3,5 +3,7 @@
 #define BRANCH_H
 
 void branch(const std::string& branchName);
+void deleteBranch(const std::string& branchName);
+void listBranches();
 
 #endif
