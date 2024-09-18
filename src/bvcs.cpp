@@ -58,9 +58,6 @@ int main(int argc, char const *argv[])
     {
         if (argc < 2)
             std::cout << "Usage: bvcs branch <name>" << std::endl;
-        // bvcs branch list
-        else if (argc == 3 && std::string(argv[2]) == "list")
-            listBranches();
         // bvcs branch <name>
         else if (argc == 3)
             branch(argv[2]);
@@ -78,7 +75,16 @@ int main(int argc, char const *argv[])
         else
             checkout(argv[2]);
     }
-
+    // bvcs list <argument>
+    else if (command == "list" || command == "-l")
+    {
+        if (argc < 3)
+            std::cout << "Usage: bvcs list <argument>" << std::endl;
+        else if (std::string(argv[2]) == "branches" || std::string(argv[2]) == "-b")
+            listBranches();
+        else if (std::string(argv[2]) == "staging" || std::string(argv[2]) == "-s")
+            listStagedFiles();
+    }
     else
     {
         std::cout << "Unknown command: use -h to see usages" << std::endl;

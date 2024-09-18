@@ -77,3 +77,29 @@ void unstage(const std::string& file)
         parentPath = parentPath.parent_path();
     }
 }
+
+void listStagedFiles()
+{
+    // Check if repo has been created
+    fs::path repoPath = ".bvcs"; 
+    if (!fs::exists(repoPath))
+    {
+        cout << "Initialize repo first" << endl;
+        return;
+    }
+
+    fs::path stagingPath = ".bvcs/staging";
+
+    if (fs::is_empty(stagingPath))
+    {
+        cout << "No files staged" << endl;
+        return;
+    }
+
+    cout << "Staged files and directories:" << endl;
+    for (const auto& dir_entry : fs::recursive_directory_iterator(stagingPath))
+    {
+        cout << dir_entry.path().string() << endl;
+    }
+
+}
