@@ -64,3 +64,21 @@ void deleteBranch(const string& branchName)
     filesystem::remove(branchPath);
     cout << "Deleted branch " << branchName << endl;
 }
+
+void listBranches()
+{
+    // Check if repo has been created
+    fs::path repoPath = {".bvcs"}; 
+    if (!fs::exists(repoPath))
+    {
+        cout << "Initialize repo first" << endl;
+        return;
+    }
+
+    cout << "Branches:\n";
+
+    // Loop through all files in head directory to get branch names
+    fs::path branchPath = ".bvcs/refs/heads/";
+    for (const auto& branch : fs::directory_iterator(branchPath))
+        cout << branch.path().filename().string() << endl;
+}
