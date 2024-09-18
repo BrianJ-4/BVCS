@@ -53,8 +53,19 @@ void unstage(const std::string& file)
         return;
     }
 
-    fs::remove(stagedFilePath);
-    cout << "Unstaged " << file << endl;
+    // Check if trying to unstage a directory or file
+    // If directory we need to use remove_all to recursively remove
+    // Fix for Issue #5
+    if (fs::is_directory(stagedFilePath))
+    {
+        fs::remove_all(stagedFilePath);
+        cout << "Unstaged " << file << " and its contents" << endl;
+    }
+    else
+    {
+        fs::remove(stagedFilePath);
+        cout << "Unstaged " << file << endl;
+    }
 
     // Get the parent of the file we just unstaged
     // Loop while parentPath is empty and we have not reached the root of staging
