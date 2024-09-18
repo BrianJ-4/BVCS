@@ -55,4 +55,14 @@ void unstage(const std::string& file)
 
     fs::remove(stagedFilePath);
     cout << "Unstaged " << file << endl;
+
+    // Get the parent of the file we just unstaged
+    // Loop while parentPath is empty and we have not reached the root of staging
+    // Fix for Issue #4
+    fs::path parentPath = stagedFilePath.parent_path();
+    while (fs::is_empty(parentPath) && parentPath != stagingPath)
+    {
+        fs::remove(parentPath);
+        parentPath = parentPath.parent_path();
+    }
 }
