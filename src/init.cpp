@@ -1,6 +1,7 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <branch.h>
 namespace fs = std::filesystem;
 
 void init()
@@ -21,12 +22,14 @@ void init()
     fs::create_directory(bvcsPath / "refs");
     fs::create_directory(bvcsPath / "refs/heads");
 
+    // TO DO
+    // Call branch() from branch.cpp to create the main branch
+
+    branch("main");
+
     std::ofstream headFile(bvcsPath / "HEAD");
     headFile << "ref: refs/heads/main\n";
     headFile.close();
-
-    std::ofstream mainFile(bvcsPath / "refs/heads/main");
-    mainFile.close();
 
     std::cout << "Initialized new BVCS repository" << std::endl;
 }
