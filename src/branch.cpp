@@ -25,7 +25,9 @@ void branch(const string& branchName)
     
     // Create new branch
     ofstream newBranch(newBranchPath);
+    newBranch << "null";
     newBranch.close();
+
     cout << "Created branch " << branchName << endl;
 }
 
