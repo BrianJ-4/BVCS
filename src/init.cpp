@@ -22,9 +22,6 @@ void init()
     fs::create_directory(bvcsPath / "refs");
     fs::create_directory(bvcsPath / "refs/heads");
 
-    // TO DO
-    // Call branch() from branch.cpp to create the main branch
-
     branch("main");
 
     std::ofstream headFile(bvcsPath / "HEAD");
