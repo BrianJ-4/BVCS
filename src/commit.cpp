@@ -98,25 +98,28 @@ void commit(const vector<string>& messageVector)
     branchHead << commitID;
     branchHead.close();
 
-    // Create directory to store staged files
-    fs::create_directories(commitPath / "files");
+    // Create files directory in new commit
+    fs::path newCommitFilesPath = commitPath / "files";
+    fs::create_directories(newCommitFilesPath);
+
+    // Copy files directory from parent commit
+    // This will ensure that a commit will have a snapshot of the full project at that point in time
+    // Fix for Issue #9
+    if(parentCommit != "")
+    {
+        fs::path parentFilesPath = ".bvcs/objects/" + parentCommit + "/files";
+        fs::copy(parentFilesPath, newCommitFilesPath, std::filesystem::copy_options::recursive);
+    }
 
     // Copy over staged files and directories
-    fs::path stagingFilePath = commitPath / "files";
     for (const auto& dir_entry : fs::recursive_directory_iterator(stagingPath))
     {
         // Get the relative path of the current directory
         fs::path path = dir_entry.path().lexically_relative(stagingPath);
-        fs::path targetPath = stagingFilePath / path;
+        fs::path targetPath = newCommitFilesPath / path;
 
-        // If directory we create it in staging area
-        if (fs::is_directory(dir_entry))
-            fs::create_directories(targetPath);
-        else
-        {
-            fs::create_directories(targetPath.parent_path());
-            fs::copy(dir_entry.path(), targetPath, fs::copy_options::overwrite_existing);
-        }
+        fs::create_directories(targetPath.parent_path());
+        fs::copy(dir_entry.path(), targetPath, fs::copy_options::overwrite_existing);
     }
 
     // Clear the staging directory
