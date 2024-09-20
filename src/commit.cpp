@@ -76,7 +76,7 @@ void commit(const vector<string>& messageVector)
     fs::create_directories(commitPath);
 
     // Create commit metadata file along with its content
-    fs::path commitFilePath(commitID + ".txt");
+    fs::path commitFilePath("data");
     std::ofstream commitFile(commitPath / commitFilePath);
     commitFile << "commit: " << commitID << "\n";
     commitFile << "date: " << time << "\n";
