@@ -25,7 +25,7 @@ void init()
     branch("main");
 
     std::ofstream headFile(bvcsPath / "HEAD");
-    headFile << "ref: refs/heads/main\n";
+    headFile << "ref: refs/heads/main";
     headFile.close();
 
     std::cout << "Initialized new BVCS repository" << std::endl;
