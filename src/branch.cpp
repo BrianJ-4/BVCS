@@ -26,6 +26,7 @@ void branch(const string& branchName)
     // Create new branch
     ofstream newBranch(newBranchPath);
     newBranch.close();
+
     cout << "Created branch " << branchName << endl;
 }
 
@@ -81,4 +82,15 @@ void listBranches()
     fs::path branchPath = ".bvcs/refs/heads/";
     for (const auto& branch : fs::directory_iterator(branchPath))
         cout << branch.path().filename().string() << endl;
+}
+
+string getCheckedOutBranch()
+{
+    string content;
+    ifstream headFile(".bvcs/HEAD");
+    getline(headFile, content);
+    headFile.close();
+    
+    size_t lastSlashPostition = content.find_last_of('/');
+    return content.substr(lastSlashPostition + 1);
 }
