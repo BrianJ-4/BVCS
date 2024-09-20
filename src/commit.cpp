@@ -79,7 +79,7 @@ void commit(const vector<string>& messageVector)
     fs::path commitFilePath("data");
     std::ofstream commitFile(commitPath / commitFilePath);
     commitFile << "commit: " << commitID << "\n";
-    commitFile << "date: " << time << "\n";
+    commitFile << "date: " << time;
     commitFile << "message: " << message << "\n";
     // Get parent commit to store in commit metadata
     string parentCommit = getCommitParent();
