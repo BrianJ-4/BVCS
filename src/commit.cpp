@@ -44,6 +44,25 @@ string getCommitParent()
     return parentCommit;
 }
 
+void removeDeletedFiles(const fs::path& parentCommitFilesPath, const fs::path& newCommitFilesPath)
+{
+    // Loop through files directory of parent commit
+    for (const auto& dir_entry : fs::recursive_directory_iterator(parentCommitFilesPath))
+    {
+        // Get path relative to parent commit's file directory and then construct same path relative to working directory 
+        fs::path relativePath = dir_entry.path().lexically_relative(parentCommitFilesPath);
+        fs::path workingDirFile = fs::current_path() / relativePath;
+        
+        // If path does not exist then we have deleted the file from working directory, so delete it from
+        // new commit's files directory
+        if (!fs::exists(workingDirFile))
+        {
+            fs::path deletedFile = newCommitFilesPath / relativePath;
+            fs::remove_all(deletedFile);
+        }
+    }
+}
+
 void commit(const vector<string>& messageVector)
 {
     // Check if repo has been created
@@ -107,8 +126,11 @@ void commit(const vector<string>& messageVector)
     // Fix for Issue #9
     if(parentCommit != "")
     {
-        fs::path parentFilesPath = ".bvcs/objects/" + parentCommit + "/files";
-        fs::copy(parentFilesPath, newCommitFilesPath, std::filesystem::copy_options::recursive);
+        fs::path parentCommitFilesPath = ".bvcs/objects/" + parentCommit + "/files";
+        fs::copy(parentCommitFilesPath, newCommitFilesPath, std::filesystem::copy_options::recursive);
+
+        // Remove files that were copied over from previous commit but no longer in working directory
+        removeDeletedFiles(parentCommitFilesPath, newCommitFilesPath);
     }
 
     // Copy over staged files and directories
