@@ -4,6 +4,7 @@
 #include <string>
 #include <filesystem>
 #include <fstream>
+#include <branch.h>
 namespace fs = std::filesystem;
 
 using namespace std;
@@ -19,12 +20,28 @@ string getSystemTime()
 
 string generateCommitID(const string& message, const string& time)
 {
+    // Combine the commit message and commit time and remove spaces
     string combined = message + time;
     combined.erase(remove(combined.begin(), combined.end(), ' '), combined.end()); 
     
+    // Generate the hash from the combined string
     hash<string> hasher;
     size_t hash = hasher(combined);
     return "c" + std::to_string(hash);
+}
+
+string getCommitParent()
+{
+    // Get currently checked out branch
+    string currentBranch = getCheckedOutBranch();    
+    fs::path branchPath = ".bvcs/refs/heads/" + currentBranch;
+    
+    // Find parent commit stored in branch's head 
+    string parentCommit;
+    ifstream branchHead(branchPath);
+    getline(branchHead, parentCommit);
+    branchHead.close();
+    return parentCommit;
 }
 
 void commit(const vector<string>& messageVector)
@@ -45,28 +62,41 @@ void commit(const vector<string>& messageVector)
         return;
     }
 
-    // Get the commit message
+    // Get commit message
     string message;
     for (const auto& word : messageVector)
         message.append(word + " ");
     
-    // Generate a unique commit ID
+    // Generate unique commit ID
     string time = getSystemTime();
     string commitID = generateCommitID(message, time);
     
     // Create directory to store commit contents
-    fs::path filePath(commitID); 
-    fs::path objectsPath = ".bvcs/objects";
-    fs::path commitPath = objectsPath / filePath;
-    fs::create_directories(objectsPath / commitID);
+    fs::path commitPath = ".bvcs/objects/" + commitID;
+    fs::create_directories(commitPath);
 
     // Create commit metadata file along with its content
-    fs::path commitFilePath(commitID + ".txt"); 
+    fs::path commitFilePath(commitID + ".txt");
     std::ofstream commitFile(commitPath / commitFilePath);
     commitFile << "commit: " << commitID << "\n";
     commitFile << "date: " << time << "\n";
-    commitFile << "message: " << message << "\n"; 
+    commitFile << "message: " << message << "\n";
+    // Get parent commit to store in commit metadata
+    string parentCommit = getCommitParent();
+    if (parentCommit != "")
+        commitFile << "parent: " << parentCommit; 
+    else
+    {
+        commitFile << "parent: null";
+    }
     commitFile.close();
+
+    // Update branch head to point to latest commit
+    string currentBranch = getCheckedOutBranch();
+    fs::path branchPath = ".bvcs/refs/heads/" + currentBranch;
+    ofstream branchHead(branchPath, std::ofstream::trunc);
+    branchHead << commitID;
+    branchHead.close();
 
     // Create directory to store staged files
     fs::create_directories(commitPath / "files");
